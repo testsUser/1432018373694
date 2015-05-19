@@ -1,9 +1,8 @@
 /*jshint camelcase:false*/
 
-'use strict';
-
 module.exports = function (grunt)
 {
+    'use strict';
 
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-watch');
@@ -32,6 +31,27 @@ module.exports = function (grunt)
                     }
                 }
             }
+        },
+
+        karma: {
+            unit: {
+                configFile: 'test/karma.conf.js'
+            }
+        },
+
+        jshint: {
+            all: ['Gruntfile.js', 'app/*.js', 'test/**/*.js'],
+            options: {
+                ignores: 'app/bower_components'
+            }
+        },
+
+        wiredep: {
+            task: {
+                src: [
+                    'app/**/*.html'
+                ]
+            }
         }
 
     });
@@ -41,5 +61,15 @@ module.exports = function (grunt)
         grunt.task.run(['connect:livereload', 'watch']);
     });
 
+    grunt.registerTask('jshint', ['jshint']);
+
+    grunt.registerTask('karma', ['karma']);
+
+    grunt.registerTask('wiredep', ['wiredep']);
+
     grunt.registerTask('default', ['serve']);
+
+    grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-karma');
+    grunt.loadNpmTasks('grunt-wiredep');
 };
