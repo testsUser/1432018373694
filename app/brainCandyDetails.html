@@ -1,0 +1,28 @@
+<div class="page-header">
+    <h1>Candy {{ candyDetails.details.id }}: <small>{{ candyDetails.details.author }} - {{ candyDetails.details.name }}</small></h1>
+</div>
+
+<form class="form-horizontal" role="form">
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Name:</label>
+
+        <div class="col-sm-5">
+            <input type="text" ng-model="candyDetails.details.name" class="form-control"
+                   value="{{ candyDetails.details.name }}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Author:</label>
+
+        <div class="col-sm-5">
+            <input type="text" ng-model="candyDetails.details.author" class="form-control"
+                   value="{{ candyDetails.details.author }}">
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-5">
+            <a class="btn btn-primary btn-sm" href="#/">Back</a>
+            <a class="btn btn-primary btn-sm" ng-click="candyDetails.saveCandy()" href="#/">Save</a>
+        </div>
+    </div>
+</form>

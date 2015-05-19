@@ -1,4 +1,4 @@
-xdescribe("BrainCandyListCtrl", function ()
+describe("BrainCandyListCtrl", function ()
 {
     'use strict';
 
