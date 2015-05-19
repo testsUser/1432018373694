@@ -13,26 +13,30 @@
 
     function createNewOrUpdate(phone)
     {
-        if (!phone._id) {
-            //    create
-            return new Model(phone).saveQ().then(function (result)
-            {
-                return {results: result};
-            });
-        } else {
-            //update
-            var id = phone._id;
-            delete phone._id;
-            return Model.where('_id').equals(id).findOneAndUpdateQ(phone).then(function (results)
-            {
-                return {results: results};
-            });
-        }
+        var filter = {_id: phone._id || null};
+        return Model.findOneAndUpdateQ(filter, phone, {upsert: true}).then(function (result)
+        {
+            return {results: result};
+        });
     }
 
     function search(query)
     {
-
+        var pattern = query.query || '';
+        var filter = { $or: [
+            {model: {$regex: pattern, $options: 'i'}},
+            {brand: {$regex: pattern, $options: 'i'}},
+            {stan: {$regex: pattern, $options: 'i'}}
+        ]};
+        var skip = parseInt(query.skip, 10) || 0;
+        var limit = parseInt(query.limit, 10) || 0;
+        return Model.find(filter).skip(skip).limit(limit).then(function (result)
+        {
+            return Model.find(filter).count().then(function (size)
+            {
+                return {results: result, total: size};
+            });
+        });
     }
 
     function getDetails(phoneId)
