@@ -32,7 +32,24 @@
 
     function search(query)
     {
+        var pattern = query.query || '';
+        var filter = { $or: [
+            {model: {$regex: pattern, $options: 'i'}},
+            {brand: {$regex: pattern, $options: 'i'}},
+            {stan: {$regex: pattern, $options: 'i'}}
+        ]};
+        var sort = {};
+        sort[query.sortBy || '_id'] = query.orderBy ? query.orderBy.toLowerCase() : 'asc';
+        var skip = parseInt(query.skip, 10) || 0;
+        var limit = parseInt(query.limit, 10) || 1;
 
+        return Model.find(filter).count().execQ().then(function (total)
+        {
+            return Model.aggregate().match(filter).sort(sort).skip(skip).limit(limit).execQ().then(function (result)
+            {
+                return {results: result, total: total};
+            });
+        });
     }
 
     function getDetails(phoneId)
